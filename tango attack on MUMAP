@@ -1,0 +1,65 @@
+import re
+    print("\nServer Update Phase:")
+    print(f"IDS_old: {IDS_old} (Eq(10))")
+    print(f"IDS_new: {IDS_new} (Eq(11))")
+    print(f"SID_new: {SID_new} (Eq())")
+    print(f"SID_old: {SID_old} (Eq(11))")
+    print(f"K1_old: {K1_old} (Eq(12))")
+    print(f"K1_new: {K1_new} (Eq(12))")
+    print(f"K2_old: {K2_old} (Eq(13))")
+    print(f"K2_new: {K2_new} (Eq(13))")
+    # print(f"TS: {TS} (Updated)")
+
+    return IDS_old, IDS_new, SID_old, SID_new, K1_old, K1_new, K2_old, K2_new
+
+def main():
+    bit_options = [4, 8, 16, 32, 64, 96]
+    bit_system = int(input(f"Select bit system {bit_options}: "))
+    while bit_system not in bit_options:
+        print("Invalid bit system. Please choose from the available options.")
+        bit_system = int(input(f"Select bit system {bit_options}: "))
+
+    num_sessions = int(input("Enter the number of sessions: "))
+    while num_sessions <= 0:
+        print("Invalid number of sessions. Please enter a positive integer.")
+        num_sessions = int(input("Enter the number of sessions: "))
+
+    # Initialize all variables before the first session
+    ID = get_valid_input("Enter ID: ", bit_system)
+    IDS_old = generate_random_binary(bit_system)
+    IDS_new = generate_random_binary(bit_system)
+    SID_old = generate_random_binary(bit_system)
+    SID_new = generate_random_binary(bit_system)
+    K1_old = generate_random_binary(bit_system)
+    K1_new = generate_random_binary(bit_system)
+    K2_old = generate_random_binary(bit_system)
+    K2_new = generate_random_binary(bit_system)
+    TT = generate_random_binary(bit_system)
+    TS = generate_random_binary(bit_system)
+
+    for session_num in range(1, num_sessions + 1):
+        print(f"\n--- Session {session_num} ---")
+
+        # Initialize N1 with a random binary value
+        N1 = generate_random_binary(bit_system)
+
+        # Display all variables at the start of the session
+        print("\nAll Variables Before Session:")
+        print(f"N1: {N1}")
+        print(f"IDS_old: {IDS_old}")
+        print(f"IDS_new: {IDS_new}")
+        print(f"SID_old: {SID_old}")
+        print(f"SID_new: {SID_new}")
+        print(f"K1_old: {K1_old}")
+        print(f"K1_new: {K1_new}")
+        print(f"K2_old: {K2_old}")
+        print(f"K2_new: {K2_new}")
+        print(f"TT: {TT}")
+        print(f"TS: {TS}")
+
+        # Run the protocol phase
+        IDS_old, IDS_new, SID_old, SID_new, K1_old, K1_new, K2_old, K2_new = \
+            run_protocol_phase(N1, ID, IDS_old, IDS_new, SID_old, SID_new, K1_old, K1_new, K2_old, K2_new, TT, TS, bit_system)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,60 @@
+import random
+import re
+import time
+
+def xor(binary_str1, binary_str2):
+    y = int(binary_str1, 2) ^ int(binary_str2, 2)
+    return ('{0:0{1}b}'.format(y, len(binary_str1)))
+
+def rotate_left(binary_str, n):
+    binary_int = int(binary_str, 2)
+    length = len(binary_str)
+    rotated_int = (binary_int << n) | (binary_int >> (length - n))
+    mask = (1 << length) - 1
+    rotated_int &= mask
+    rotated_binary_str = bin(rotated_int)[2:]
+    rotated_binary_str = rotated_binary_str.zfill(length)
+    return rotated_binary_str
+
+def count_ones(binary_str):
+    return binary_str.count('1')
+
+def generate_random_binary(bits):
+    random.seed(time.time())
+    return ''.join(random.choice('01') for _ in range(bits))
+
+def to_binary(value, bits):
+    if re.match(r'^[0-9]+$', value):
+        return format(int(value), f'0{bits}b')
+    elif re.match(r'^[0-9A-Fa-f]+$', value):
+        return format(int(value, 16), f'0{bits}b')
+    else:
+        return value
+
+def validate_input(value, bits):
+    return len(value) == bits and all(c in '01' for c in value)
+
+def invert_binary(binary_str):
+    return ''.join('0' if bit == '1' else '1' for bit in binary_str)
+
+def get_valid_input(prompt, bits):
+    while True:
+        value = input(prompt)
+        value_binary = to_binary(value, bits)
+        if validate_input(value_binary, bits):
+            return value_binary
+        else:
+            print(f"Invalid input. Please enter a value with {bits} bits in binary.")
+
+def calculate_WM(A, C):
+    return count_ones(xor(A, C))
+
+def count_matching_bits(binary_str1, binary_str2):
+    return sum(1 for a, b in zip(binary_str1, binary_str2) if a == b)
+
+def main():
+    bit_options = [4, 8, 16, 32, 64, 96]
+    bit_system = int(input(f"Select bit system {bit_options}: "))
+    while bit_system not in bit_options:
+        print("Invalid bit system. Please choose from the available options.")
+        bit_system = int(input(f"Select bit system {bit_options}: "))
